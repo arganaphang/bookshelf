@@ -30,9 +30,14 @@ export const createBookSchema = z
         reading: z.boolean().default(false),
         finished: z.boolean().default(false),
     })
-    .refine((data) => data.pageCount && data.readPage && data.readPage <= data.pageCount, {
-        message: "Gagal menambahkan buku. readPage tidak boleh lebih besar dari pageCount",
-    })
+    .refine(
+        (data) => {
+            return data.readPage <= data.pageCount;
+        },
+        {
+            message: "Gagal menambahkan buku. readPage tidak boleh lebih besar dari pageCount",
+        },
+    )
     .transform((data, ctx) => {
         if (data.readPage === data.pageCount) {
             data.finished = true;
@@ -54,7 +59,7 @@ export const updateBookSchema = z
         reading: z.boolean().default(false),
         finished: z.boolean().default(false),
     })
-    .refine((data) => data.pageCount && data.readPage && data.readPage <= data.pageCount, {
+    .refine((data) => data.readPage <= data.pageCount, {
         message: "Gagal memperbarui buku. readPage tidak boleh lebih besar dari pageCount",
     })
     .transform((data, ctx) => {
@@ -65,3 +70,11 @@ export const updateBookSchema = z
     });
 
 export type TUpdateBook = z.infer<typeof updateBookSchema>;
+
+export const getAllBookParamsSchema = z.object({
+    reading: z.boolean().optional(),
+    finished: z.boolean().optional(),
+    name: z.string().optional(),
+});
+
+export type TGetAllBookParams = z.infer<typeof getAllBookParamsSchema>;

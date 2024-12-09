@@ -1,5 +1,11 @@
 import type { IServices } from "@/services";
-import { type TCreateBook, type TUpdateBook, createBookSchema, updateBookSchema } from "@/types/book";
+import {
+    type TCreateBook,
+    type TGetAllBookParams,
+    type TUpdateBook,
+    createBookSchema,
+    updateBookSchema,
+} from "@/types/book";
 import type Hapi from "@hapi/hapi";
 import { type ZodIssue, z } from "zod";
 
@@ -46,7 +52,16 @@ export default class BookRoute {
             method: "get",
             path: "/books",
             handler: async (req, res) => {
-                const result = await this.getAll();
+                let { reading, finished, name } = req.query;
+                if (reading !== undefined) {
+                    if (reading === "1") reading = true;
+                    if (reading === "0") reading = false;
+                }
+                if (finished !== undefined) {
+                    if (finished === "1") finished = true;
+                    if (finished === "0") finished = false;
+                }
+                const result = await this.getAll({ reading, finished, name });
                 return res
                     .response({ status: "success", message: "Buku berhasil ditemukan", data: { books: result } })
                     .code(200);
@@ -122,8 +137,8 @@ export default class BookRoute {
         return this.services.bookService.create(data);
     }
 
-    getAll() {
-        return this.services.bookService.getAll();
+    getAll(params: TGetAllBookParams) {
+        return this.services.bookService.getAll(params);
     }
 
     getByID(id: string) {

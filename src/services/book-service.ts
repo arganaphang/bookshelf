@@ -1,8 +1,8 @@
-import type { TBook, TCreateBook, TGetAllBook, TUpdateBook } from "@/types/book";
+import type { TBook, TCreateBook, TGetAllBook, TGetAllBookParams, TUpdateBook } from "@/types/book";
 
 export interface BookService {
     create(data: TCreateBook): TBook;
-    getAll(): TGetAllBook[];
+    getAll(params: TGetAllBookParams): TGetAllBook[];
     getByID(id: string): TBook | undefined;
     updateByID(id: string, data: TUpdateBook): boolean;
     deleteByID(id: string): boolean;

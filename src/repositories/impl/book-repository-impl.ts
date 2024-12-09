@@ -1,5 +1,5 @@
 import type { BookRepository } from "@/repositories/book-repository";
-import type { TBook, TCreateBook, TGetAllBook, TUpdateBook } from "@/types/book";
+import type { TBook, TCreateBook, TGetAllBook, TGetAllBookParams, TUpdateBook } from "@/types/book";
 import { nanoid } from "nanoid";
 
 export default class BookRepositoryImpl implements BookRepository {
@@ -23,8 +23,22 @@ export default class BookRepositoryImpl implements BookRepository {
         return newBook;
     }
 
-    getAll(): TGetAllBook[] {
-        return this.#database.map((book) => ({ id: book.id, name: book.name, publisher: book.publisher }));
+    getAll(params: TGetAllBookParams): TGetAllBook[] {
+        let books: TBook[] = [...this.#database];
+
+        if (params.reading !== undefined) {
+            books = books.filter((book) => book.reading === params.reading);
+        }
+
+        if (params.finished !== undefined) {
+            books = books.filter((book) => book.finished === params.finished);
+        }
+
+        if (params.name !== undefined) {
+            books = books.filter((book) => book.name.toLowerCase().includes(params.name?.toLowerCase() ?? ""));
+        }
+
+        return books.map((book) => ({ id: book.id, name: book.name, publisher: book.publisher }));
     }
 
     getByID(id: string): TBook | undefined {

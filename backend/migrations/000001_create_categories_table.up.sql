@@ -1,0 +1,1 @@
+CREATE TABLE IF NOT EXISTS "public"."categories" (name VARCHAR PRIMARY KEY);

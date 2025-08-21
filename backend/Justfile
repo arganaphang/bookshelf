@@ -6,10 +6,10 @@ format:
 
 # docs -> generate api documentation
 docs:
-	swag init --parseDependency --parseInternal --output ./docs --dir ./cmd
+	swag init --parseDependency --parseInternal --output ./docs --dir ./cmd,./internal/route
 
 # build -> build application
-build: format
+build: docs
 	go build -o main ./cmd
 
 # run -> application
@@ -18,7 +18,7 @@ run:
 
 # dev -> run build then run it
 dev: 
-	watchexec -r -c -e go -- just build run
+	watchexec -r -c -e go --ignore '**/docs/**' -- just build run
 
 # test -> testing
 test:

@@ -1,0 +1,1 @@
+CREATE TABLE IF NOT EXISTS "public"."writers" (name VARCHAR PRIMARY KEY);

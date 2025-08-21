@@ -3,7 +3,12 @@ module github.com/arganaphang/bookshelf/backend
 go 1.24.3
 
 require (
+	github.com/doug-martin/goqu/v9 v9.19.0
 	github.com/gofiber/fiber/v2 v2.52.9
+	github.com/jmoiron/sqlx v1.4.0
+	github.com/lib/pq v1.10.9
+	github.com/oklog/ulid/v2 v2.1.1
+	github.com/sirupsen/logrus v1.9.3
 	github.com/swaggo/swag v1.16.6
 )
 

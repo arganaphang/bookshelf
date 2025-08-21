@@ -1,5 +1,139 @@
 basePath: /
 definitions:
+  dto.CreateBookResponse:
+    properties:
+      data:
+        $ref: '#/definitions/entity.Book'
+      message:
+        type: string
+      success:
+        type: boolean
+    type: object
+  dto.CreateCategoryRequest:
+    properties:
+      name:
+        type: string
+    type: object
+  dto.CreateCategoryResponse:
+    properties:
+      message:
+        type: string
+      success:
+        type: boolean
+    type: object
+  dto.CreateWriterRequest:
+    properties:
+      name:
+        type: string
+    type: object
+  dto.CreateWriterResponse:
+    properties:
+      message:
+        type: string
+      success:
+        type: boolean
+    type: object
+  dto.DeleteBookByIDResponse:
+    properties:
+      data: {}
+      message:
+        type: string
+      success:
+        type: boolean
+    type: object
+  dto.GetAllBooksResponse:
+    properties:
+      data:
+        items:
+          $ref: '#/definitions/entity.Book'
+        type: array
+      message:
+        type: string
+      success:
+        type: boolean
+    type: object
+  dto.GetAllCategoriesResponse:
+    properties:
+      data:
+        items:
+          $ref: '#/definitions/entity.Category'
+        type: array
+      message:
+        type: string
+      success:
+        type: boolean
+    type: object
+  dto.GetAllWritersResponse:
+    properties:
+      data:
+        items:
+          $ref: '#/definitions/entity.Writer'
+        type: array
+      message:
+        type: string
+      success:
+        type: boolean
+    type: object
+  dto.GetBookByIDResponse:
+    properties:
+      data:
+        $ref: '#/definitions/entity.Book'
+      message:
+        type: string
+      success:
+        type: boolean
+    type: object
+  dto.UpdateBookByIDResponse:
+    properties:
+      data: {}
+      message:
+        type: string
+      success:
+        type: boolean
+    type: object
+  entity.Book:
+    properties:
+      cover_url:
+        type: string
+      created_at:
+        type: string
+      id:
+        type: string
+      status:
+        $ref: '#/definitions/entity.BookStatus'
+      synopsis:
+        type: string
+      title:
+        type: string
+      updated_at:
+        type: string
+      writer:
+        type: string
+      year:
+        type: integer
+    type: object
+  entity.BookStatus:
+    enum:
+    - NOT_STARTED
+    - WISHLIST
+    - READING
+    - FINISHED
+    type: string
+    x-enum-varnames:
+    - BookStatusNotStarted
+    - BookStatusWishlist
+    - BookStatusReading
+    - BookStatusFinished
+  entity.Category:
+    properties:
+      name:
+        type: string
+    type: object
+  entity.Writer:
+    properties:
+      name:
+        type: string
+    type: object
   main.HealthzResponse:
     properties:
       message:
@@ -12,13 +146,174 @@ info:
   contact:
     email: arganaphangquestian@gmail.com
     name: Argana Phangquestian
-  description: This is a server for a example REST API.
+  description: This is a server for a Bookshelf REST API.
   license:
     name: MIT License
     url: https://mit-license.org/
-  title: Example API
+  title: Bookshelf API
   version: "1.0"
 paths:
+  /api/v1/books:
+    get:
+      consumes:
+      - application/json
+      description: Get All Books
+      operationId: book-get-all
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/dto.GetAllBooksResponse'
+      summary: Get All
+      tags:
+      - Books
+    post:
+      description: Create Book
+      operationId: book-create
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/dto.CreateBookResponse'
+      summary: Create
+      tags:
+      - Books
+  /api/v1/books/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: Delete Book by ID
+      operationId: book-delete
+      parameters:
+      - description: Book Id
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/dto.DeleteBookByIDResponse'
+      summary: Delete
+      tags:
+      - Books
+    get:
+      consumes:
+      - application/json
+      description: Get Book by ID
+      operationId: book-get
+      parameters:
+      - description: Book Id
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/dto.GetBookByIDResponse'
+      summary: Get By ID
+      tags:
+      - Books
+    put:
+      consumes:
+      - application/json
+      description: Update Book by ID
+      operationId: book-update
+      parameters:
+      - description: Book Id
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/dto.UpdateBookByIDResponse'
+      summary: Update
+      tags:
+      - Books
+  /api/v1/categories:
+    get:
+      description: Get All Category
+      operationId: category-get-all
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/dto.GetAllCategoriesResponse'
+      summary: Get All
+      tags:
+      - Categories
+    post:
+      description: Create Category
+      operationId: category-create
+      parameters:
+      - description: request body create category
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/dto.CreateCategoryRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/dto.CreateCategoryResponse'
+      summary: Create
+      tags:
+      - Categories
+  /api/v1/writers:
+    get:
+      description: Get All Writer
+      operationId: writer-get-all
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/dto.GetAllWritersResponse'
+      summary: Get All
+      tags:
+      - Writers
+    post:
+      description: Create Writer
+      operationId: writer-create
+      parameters:
+      - description: request body create writer
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/dto.CreateWriterRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/dto.CreateWriterResponse'
+      summary: Create
+      tags:
+      - Writers
   /healthz:
     get:
       description: Health Check
@@ -30,4 +325,7 @@ paths:
           description: OK
           schema:
             $ref: '#/definitions/main.HealthzResponse'
+      summary: Health
+      tags:
+      - Health
 swagger: "2.0"

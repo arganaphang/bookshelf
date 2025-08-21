@@ -1,0 +1,37 @@
+set dotenv-load
+format:
+	gofumpt -l -w .
+	goimports-reviser -rm-unused -set-alias ./...
+	golines -w -m 120 .
+
+# docs -> generate api documentation
+docs:
+	swag init --parseDependency --parseInternal --output ./docs --dir ./cmd
+
+# build -> build application
+build: format
+	go build -o main ./cmd
+
+# run -> application
+run:
+	./main
+
+# dev -> run build then run it
+dev: 
+	watchexec -r -c -e go -- just build run
+
+# test -> testing
+test:
+  go install github.com/bitfield/gotestdox/cmd/gotestdox@latest
+
+# health -> Hit Health Check Endpoint
+health:
+	curl -s http://localhost:8000/healthz | jq
+
+# migrate-create -> create migration
+migrate-create NAME:
+	migrate create -ext sql -dir ./migrations -seq {{NAME}}
+
+# migrate-up -> up migration
+migrate-up:
+	migrate -path ./migrations -database "$DATABASE_URL" up

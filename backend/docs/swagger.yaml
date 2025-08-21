@@ -1,0 +1,33 @@
+basePath: /
+definitions:
+  main.HealthzResponse:
+    properties:
+      message:
+        type: string
+      success:
+        type: boolean
+    type: object
+host: 0.0.0.0:8000
+info:
+  contact:
+    email: arganaphangquestian@gmail.com
+    name: Argana Phangquestian
+  description: This is a server for a example REST API.
+  license:
+    name: MIT License
+    url: https://mit-license.org/
+  title: Example API
+  version: "1.0"
+paths:
+  /healthz:
+    get:
+      description: Health Check
+      operationId: healthz
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/main.HealthzResponse'
+swagger: "2.0"

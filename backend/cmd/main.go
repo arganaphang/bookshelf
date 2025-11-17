@@ -23,7 +23,6 @@ import (
 // @contact.email arganaphangquestian@gmail.com
 // @license.name MIT License
 // @license.url https://mit-license.org/
-// @host 0.0.0.0:8000
 // @BasePath /
 func main() {
 	app := fiber.New()
